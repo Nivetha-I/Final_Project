@@ -30,7 +30,7 @@ with st.sidebar:
     #st.image(logoimage)
 
 if select== "Classification and Prediction":
-    tab1,tab2,tab3=st.tabs(["***Geological Visualization***","***Data Visualization***","***Data Correlation***"])   
+    tab1,tab2,tab3,tab4=st.tabs(["***Geological Visualization***","***Data Visualization***","***Data Correlation***","***Calculations***"])   
 
     with tab1:
         st.title("Geological Visualization of Country browsing products")
@@ -78,7 +78,36 @@ if select== "Classification and Prediction":
         plt.figure(figsize=(52,52))
         sns.heatmap(corr_data,annot=True,cmap="coolwarm")
         st.pyplot()
-    
+    with tab4:
+        import streamlit as st
+    import pandas as pd
+
+    # Load your dataset
+    df = pd.read_csv("your_dataset.csv")
+
+    # Create input widgets
+    st.title("Customer Conversion Predictor")
+    click_count = st.text_input("Enter click count")
+    session_count = st.text_input("Enter session count")
+    device = st.selectbox("Select device", ["mobile", "desktop", "tablet"])
+    button = st.button("Predict")
+
+    # Define a function to predict conversion based on input
+    def predict_conversion(click_count, session_count, device):
+        # Write your logic here
+        # For example, you can use a simple rule-based approach
+        # or a machine learning model
+        # Return True or False
+        pass
+
+    # Display the prediction result
+    if button:
+        prediction = predict_conversion(click_count, session_count, device)
+        if prediction:
+            st.success("The customer is likely to convert")
+        else:
+            st.error("The customer is not likely to convert")
+
 
 
 
