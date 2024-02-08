@@ -79,35 +79,42 @@ if select== "Classification and Prediction":
         sns.heatmap(corr_data,annot=True,cmap="coolwarm")
         st.pyplot()
     with tab4:
-        import streamlit as st
-    import pandas as pd
 
-    # Load your dataset
-    df = pd.read_csv("your_dataset.csv")
+        # Load your dataset
+        df = pd.read_csv("Classi_predict_data.csv")
 
-    # Create input widgets
-    st.title("Customer Conversion Predictor")
-    click_count = st.text_input("Enter click count")
-    session_count = st.text_input("Enter session count")
-    device = st.selectbox("Select device", ["mobile", "desktop", "tablet"])
-    button = st.button("Predict")
+        # Create a header for the app title
+        st.header("Customer Conversion Predictor")
 
-    # Define a function to predict conversion based on input
-    def predict_conversion(click_count, session_count, device):
-        # Write your logic here
-        # For example, you can use a simple rule-based approach
-        # or a machine learning model
-        # Return True or False
-        pass
+        # Create multiselect widgets for the input data
+        click_count = st.multiselect("Select click count", df["count_hit"].unique())
+        session_count = st.multiselect("Select session count", df["count_session"].unique())
+        device = st.multiselect("Select device", df["device_deviceCategory"].unique())
+                    
+        # Create a button to display the result
+        button = st.button("Display result")
 
-    # Display the prediction result
-    if button:
-        prediction = predict_conversion(click_count, session_count, device)
-        if prediction:
-            st.success("The customer is likely to convert")
-        else:
-            st.error("The customer is not likely to convert")
+        # Create a placeholder for the result
+        result_placeholder = st.empty()
 
-
-
+        # Check if the button is clicked
+        if button:
+            # Filter the dataset based on the user input
+            filtered_df = df[(df["count_hit"].isin(click_count)) & (df["count_session"].isin(session_count)) & (df["device_deviceCategory"].isin(device))]
+            
+            # Check if the filtered DataFrame is empty
+            if filtered_df.empty:
+                # Display an error message
+                result_placeholder.error("No matching data found. Please try another input.")
+            else:
+                # Access the value of the target variable 'has_converted'
+                result = filtered_df['has_converted'].iloc[0]
+                 # Display the result
+                result_placeholder.write(result)
+                if result ==0:
+                    st.write("Oops!, User Not Converted into Customer")
+                else:
+                    st.write("User Converted into Customer!")    
+               
+                
 
